@@ -243,7 +243,7 @@ export default function DashboardClient({
       balance,
       projectedBalance,
     }
-  }, [incomes, expenses, accountFilter, currentMonth, currentYear])
+  }, [incomes, expenses, debts, accountFilter, currentMonth, currentYear])
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('pt-BR', {
