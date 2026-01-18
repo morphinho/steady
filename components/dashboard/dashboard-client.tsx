@@ -239,7 +239,28 @@ export default function DashboardClient({
 
     // Calcular valor mensal das dívidas abertas que ainda não foram contabilizadas no mês atual
     const monthlyDebtPayments = filteredDebts
-      .filter((d) => d.status === 'aberta' || d.status === 'atrasada')
+      .filter((d) => {
+        // Apenas dívidas abertas ou atrasadas
+        if (d.status !== 'aberta' && d.status !== 'atrasada') return false
+        
+        // Não considerar dívidas que já foram contabilizadas no mês atual
+        const vencimento = d.data_vencimento ? new Date(d.data_vencimento) : null
+        const inicio = new Date(d.data_inicio)
+        
+        if (vencimento) {
+          const vencimentoMonth = vencimento.getMonth()
+          const vencimentoYear = vencimento.getFullYear()
+          // Excluir se vencimento é no mês atual (já foi contabilizado acima)
+          if (vencimentoYear === currentYear && vencimentoMonth === currentMonth) return false
+        } else {
+          const inicioMonth = inicio.getMonth()
+          const inicioYear = inicio.getFullYear()
+          // Excluir se começou no mês atual (já foi contabilizado acima)
+          if (inicioYear === currentYear && inicioMonth === currentMonth) return false
+        }
+        
+        return true
+      })
       .reduce((sum, d) => {
         const valorTotal = Number(d.valor_total)
         const valorPago = Number(d.valor_pago)
