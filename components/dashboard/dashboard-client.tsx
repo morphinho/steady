@@ -501,6 +501,7 @@ export default function DashboardClient({
         open={showDebtModal}
         onClose={() => setShowDebtModal(false)}
         onSuccess={refreshDebts}
+        userId={user.id}
       />
 
       {/* Modal de escolha de tipo */}

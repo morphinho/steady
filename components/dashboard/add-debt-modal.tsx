@@ -25,12 +25,14 @@ interface AddDebtModalProps {
   open: boolean
   onClose: () => void
   onSuccess: () => void
+  userId: string
 }
 
 export default function AddDebtModal({
   open,
   onClose,
   onSuccess,
+  userId,
 }: AddDebtModalProps) {
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
@@ -57,7 +59,7 @@ export default function AddDebtModal({
     try {
       const { error } = await supabase.from('debts').insert([
         {
-          user_id: null,
+          user_id: userId,
           nome: formData.nome,
           credor: formData.credor,
           valor_total: parseFloat(formData.valor_total),
