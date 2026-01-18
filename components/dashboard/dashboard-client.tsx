@@ -217,8 +217,11 @@ export default function DashboardClient({
   const handleAddChoice = (type: 'income' | 'expense' | 'debt') => {
     setShowAddChoiceModal(false)
     
-    // No mobile, redirecionar para páginas separadas
-    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+    // No mobile, sempre redirecionar para páginas separadas
+    // No desktop, usar modais
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+    
+    if (isMobile) {
       if (type === 'income') {
         router.push('/dashboard/add-income')
       } else if (type === 'expense') {
@@ -227,7 +230,6 @@ export default function DashboardClient({
         router.push('/dashboard/add-debt')
       }
     } else {
-      // No desktop, usar modais
       if (type === 'income') {
         setShowIncomeModal(true)
       } else if (type === 'expense') {
