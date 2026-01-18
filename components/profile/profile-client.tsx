@@ -14,6 +14,7 @@ import { ArrowLeft, User as UserIcon, Mail, Phone, Save, Camera, Sun, Moon } fro
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { useTheme } from '@/lib/theme-context'
+import { setCachedProfile } from '@/lib/profile-cache'
 
 interface Profile {
   id: string
@@ -122,6 +123,7 @@ export default function ProfileClient({ user, profile: initialProfile }: Profile
 
       console.log('Perfil salvo com sucesso:', data)
       setProfile(data)
+      setCachedProfile(data) // Atualizar cache
       toast({
         title: 'Perfil atualizado!',
         description: 'Suas informações foram salvas com sucesso.',

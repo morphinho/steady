@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { createBrowserClient } from '@supabase/ssr'
+import { setCachedProfile } from '@/lib/profile-cache'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -75,6 +76,20 @@ export default function LoginPage() {
           if (profileError) {
             console.error('Erro ao criar perfil:', profileError)
             // Não bloqueia o signup se o perfil falhar
+          } else {
+            // Salvar perfil no cache após criar
+            const newProfile = {
+              id: data.user.id,
+              first_name: firstName,
+              last_name: lastName,
+              phone: phone || null,
+              full_name: `${firstName} ${lastName}`.trim(),
+              avatar_url: null,
+              bio: null,
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+            }
+            setCachedProfile(newProfile)
           }
           
           console.log('Usuário criado, redirecionando...')
@@ -107,7 +122,19 @@ export default function LoginPage() {
         }
 
         if (data.session) {
-          console.log('Sessão criada com sucesso! Redirecionando...')
+          console.log('Sessão criada com sucesso! Buscando perfil...')
+          
+          // Buscar perfil e salvar no cache
+          const { data: profileData } = await supabase
+            .from('profiles')
+            .select('id, first_name, last_name, full_name, phone, avatar_url, bio, created_at, updated_at')
+            .eq('id', data.session.user.id)
+            .maybeSingle()
+          
+          if (profileData) {
+            setCachedProfile(profileData)
+          }
+          
           window.location.href = '/dashboard'
         } else {
           console.log('AVISO: Login sem erro mas sem sessão!')

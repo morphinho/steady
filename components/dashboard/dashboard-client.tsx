@@ -33,6 +33,7 @@ import AddDebtModal from './add-debt-modal'
 import TransactionsList from './transactions-list'
 import DebtsList from './debts-list'
 import BottomNav from './bottom-nav'
+import { setCachedProfile } from '@/lib/profile-cache'
 
 type Income = {
   id: string

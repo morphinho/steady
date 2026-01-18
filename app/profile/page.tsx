@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import ProfileClient from '@/components/profile/profile-client'
+import { getCachedProfile, setCachedProfile } from '@/lib/profile-cache'
 import type { User } from '@supabase/supabase-js'
 
 interface Profile {
@@ -21,7 +22,6 @@ interface Profile {
 export default function ProfilePage() {
   const router = useRouter()
   const supabase = createClient()
-  const [loading, setLoading] = useState(true)
   const [user, setUser] = useState<User | null>(null)
   const [profile, setProfile] = useState<Profile | null>(null)
 
@@ -35,33 +35,39 @@ export default function ProfilePage() {
           return
         }
 
-        // Buscar perfil em paralelo
+        setUser(session.user)
+
+        // Tentar carregar do cache primeiro
+        const cachedProfile = getCachedProfile()
+        if (cachedProfile && cachedProfile.id === session.user.id) {
+          setProfile(cachedProfile)
+        }
+
+        // Buscar do servidor em background para atualizar se necessário
         const { data: profileData } = await supabase
           .from('profiles')
           .select('id, first_name, last_name, full_name, phone, avatar_url, bio, created_at, updated_at')
           .eq('id', session.user.id)
           .maybeSingle()
 
-        setUser(session.user)
-        setProfile(profileData)
+        if (profileData) {
+          setProfile(profileData)
+          setCachedProfile(profileData)
+        }
       } catch (error) {
         console.error('Erro ao carregar perfil:', error)
-        router.push('/login')
-      } finally {
-        setLoading(false)
+        // Se houver erro, tentar usar cache se disponível
+        const cachedProfile = getCachedProfile()
+        if (cachedProfile) {
+          setProfile(cachedProfile)
+        } else {
+          router.push('/login')
+        }
       }
     }
 
     loadProfile()
   }, [router, supabase])
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-background pb-20 md:pb-0 flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-brandPrimary border-t-transparent rounded-full animate-spin" />
-      </div>
-    )
-  }
 
   if (!user) {
     return null
