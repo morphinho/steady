@@ -1,11 +1,12 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Trash2, ArrowUpCircle, ArrowDownCircle } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { useToast } from '@/hooks/use-toast'
+import TransactionDetailModal from './transaction-detail-modal'
 
 type Income = {
   id: string
@@ -31,6 +32,22 @@ type Expense = {
   conta: 'pessoal' | 'negocio'
   recorrente: boolean
   created_at: string
+}
+
+type Debt = {
+  id: string
+  nome: string
+  credor: string
+  valor_total: number
+  valor_pago: number
+  data_inicio: string
+  data_vencimento: string | null
+  taxa_juros: number
+  status: 'aberta' | 'paga' | 'atrasada'
+  conta: 'pessoal' | 'negocio'
+  parcelas_total: number | null
+  parcelas_pagas: number | null
+  observacoes: string | null
 }
 
 type Debt = {
@@ -82,6 +99,12 @@ export default function TransactionsList({
 }: TransactionsListProps) {
   const { toast } = useToast()
   const supabase = createClient()
+  const [selectedTransaction, setSelectedTransaction] = useState<{
+    transaction: Transaction
+    income?: Income
+    expense?: Expense
+    debt?: Debt
+  } | null>(null)
 
   const transactions = useMemo(() => {
     const filteredIncomes = incomes
@@ -289,7 +312,10 @@ export default function TransactionsList({
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => handleDelete(transaction.id, transaction.type)}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleDelete(transaction.id, transaction.type)
+                  }}
                   className="h-7 w-7 hover:bg-surfaceElevated ml-auto"
                 >
                   <Trash2 className="w-3.5 h-3.5 text-textTertiary" />
@@ -297,8 +323,19 @@ export default function TransactionsList({
               </div>
             </div>
           </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
+
+      <TransactionDetailModal
+        open={!!selectedTransaction}
+        onClose={() => setSelectedTransaction(null)}
+        transaction={selectedTransaction?.transaction || null}
+        income={selectedTransaction?.income}
+        expense={selectedTransaction?.expense}
+        debt={selectedTransaction?.debt}
+        onRefresh={onRefresh}
+      />
+    </>
   )
 }
