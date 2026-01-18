@@ -106,7 +106,7 @@ export default function TransactionsList({
     debt?: Debt
   } | null>(null)
 
-  const transactions = useMemo(() => {
+  const transactionsWithData = useMemo(() => {
     const filteredIncomes = incomes
       .filter((i) => (accountFilter === 'all' ? true : i.conta === accountFilter))
       .map((i): Transaction => ({
@@ -195,9 +195,21 @@ export default function TransactionsList({
         }
       })
 
-    return [...filteredIncomes, ...filteredExpenses, ...filteredDebts].sort(
+    const transactionsList = [...filteredIncomes, ...filteredExpenses, ...filteredDebts].sort(
       (a, b) => new Date(b.data).getTime() - new Date(a.data).getTime()
     )
+
+    // Criar um mapa para facilitar busca dos dados completos
+    const incomeMap = new Map(incomes.map(i => [i.id, i]))
+    const expenseMap = new Map(expenses.map(e => [e.id, e]))
+    const debtMap = new Map(debts.map(d => [d.id, d]))
+
+    return transactionsList.map(t => ({
+      transaction: t,
+      income: t.type === 'income' ? incomeMap.get(t.id) : undefined,
+      expense: t.type === 'expense' ? expenseMap.get(t.id) : undefined,
+      debt: t.type === 'debt' ? debtMap.get(t.id) : undefined,
+    }))
   }, [incomes, expenses, debts, accountFilter, currentMonth, currentYear])
 
   const handleDelete = async (id: string, type: 'income' | 'expense' | 'debt') => {
@@ -246,7 +258,7 @@ export default function TransactionsList({
     })
   }
 
-  if (transactions.length === 0) {
+  if (transactionsWithData.length === 0) {
     return (
       <div className="bg-surface rounded-2xl p-4">
         <div className="py-10 text-center text-textTertiary">
@@ -262,7 +274,7 @@ export default function TransactionsList({
         <h3 className="text-base font-medium text-textPrimary">Transações</h3>
       </div>
       <div className="space-y-2 px-4 pb-4">
-        {transactions.map((transaction) => (
+        {transactionsWithData.map(({ transaction, income, expense, debt }) => (
           <div
             key={transaction.id}
             className="flex items-start gap-3 p-3 rounded-xl hover:bg-surfaceMuted transition-fast"
