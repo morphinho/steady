@@ -34,6 +34,7 @@ import TransactionsList from './transactions-list'
 import DebtsList from './debts-list'
 import BottomNav from './bottom-nav'
 import { setCachedProfile } from '@/lib/profile-cache'
+import ProfileClient from '@/components/profile/profile-client'
 
 type Income = {
   id: string
