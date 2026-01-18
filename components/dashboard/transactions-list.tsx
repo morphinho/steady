@@ -33,29 +33,52 @@ type Expense = {
   created_at: string
 }
 
+type Debt = {
+  id: string
+  nome: string
+  credor: string
+  valor_total: number
+  valor_pago: number
+  data_inicio: string
+  data_vencimento: string | null
+  taxa_juros: number
+  status: 'aberta' | 'paga' | 'atrasada'
+  conta: 'pessoal' | 'negocio'
+  parcelas_total: number | null
+  parcelas_pagas: number | null
+  observacoes: string | null
+}
+
 interface TransactionsListProps {
   incomes: Income[]
   expenses: Expense[]
+  debts: Debt[]
   accountFilter: 'all' | 'pessoal' | 'negocio'
   onRefresh: () => void
+  currentMonth: number
+  currentYear: number
 }
 
 type Transaction = {
   id: string
-  type: 'income' | 'expense'
+  type: 'income' | 'expense' | 'debt'
   valor: number
   data: string
   description: string
   badge: string
   conta: string
   status?: string
+  isDebt?: boolean
 }
 
 export default function TransactionsList({
   incomes,
   expenses,
+  debts,
   accountFilter,
   onRefresh,
+  currentMonth,
+  currentYear,
 }: TransactionsListProps) {
   const { toast } = useToast()
   const supabase = createClient()
@@ -86,22 +109,94 @@ export default function TransactionsList({
         status: e.status,
       }))
 
-    return [...filteredIncomes, ...filteredExpenses].sort(
+    // Adicionar dívidas como transações mensais
+    const filteredDebts = debts
+      .filter((d) => {
+        if (accountFilter !== 'all' && d.conta !== accountFilter) return false
+        if (d.status === 'paga') return false
+        
+        const valorTotal = Number(d.valor_total)
+        const valorPago = Number(d.valor_pago)
+        const valorRestante = valorTotal - valorPago
+        
+        if (valorRestante <= 0) return false
+        
+        // Verificar se a dívida tem vencimento no mês atual ou se está ativa
+        const vencimento = d.data_vencimento ? new Date(d.data_vencimento) : null
+        const inicio = new Date(d.data_inicio)
+        
+        if (vencimento) {
+          const vencimentoMonth = vencimento.getMonth()
+          const vencimentoYear = vencimento.getFullYear()
+          // Incluir se vencimento é no mês atual ou futuro
+          return vencimentoYear > currentYear || 
+                 (vencimentoYear === currentYear && vencimentoMonth >= currentMonth)
+        }
+        
+        // Se não tem vencimento, verificar se começou no mês atual ou antes
+        const inicioMonth = inicio.getMonth()
+        const inicioYear = inicio.getFullYear()
+        return inicioYear < currentYear || 
+               (inicioYear === currentYear && inicioMonth <= currentMonth)
+      })
+      .map((d): Transaction => {
+        const valorTotal = Number(d.valor_total)
+        const valorPago = Number(d.valor_pago)
+        const valorRestante = valorTotal - valorPago
+        
+        let valorMensal = valorRestante
+        
+        // Se tem parcelas, calcular valor mensal
+        if (d.parcelas_total && d.parcelas_total > 0) {
+          const parcelasPagas = d.parcelas_pagas || 0
+          const parcelasRestantes = d.parcelas_total - parcelasPagas
+          
+          if (parcelasRestantes > 0) {
+            valorMensal = valorRestante / parcelasRestantes
+          }
+        }
+        
+        // Usar data de vencimento se disponível, senão usar data de início
+        const dataTransacao = d.data_vencimento || d.data_inicio
+        
+        return {
+          id: d.id,
+          type: 'debt',
+          valor: valorMensal,
+          data: dataTransacao,
+          description: `${d.nome}${d.credor ? ` - ${d.credor}` : ''}`,
+          badge: d.parcelas_total ? `Parcela ${(d.parcelas_pagas || 0) + 1}/${d.parcelas_total}` : 'Dívida',
+          conta: d.conta,
+          status: d.status === 'atrasada' ? 'atrasada' : undefined,
+          isDebt: true,
+        }
+      })
+
+    return [...filteredIncomes, ...filteredExpenses, ...filteredDebts].sort(
       (a, b) => new Date(b.data).getTime() - new Date(a.data).getTime()
     )
-  }, [incomes, expenses, accountFilter])
+  }, [incomes, expenses, debts, accountFilter, currentMonth, currentYear])
 
-  const handleDelete = async (id: string, type: 'income' | 'expense') => {
+  const handleDelete = async (id: string, type: 'income' | 'expense' | 'debt') => {
     try {
-      const table = type === 'income' ? 'incomes' : 'expenses'
-      const { error } = await supabase.from(table).delete().eq('id', id)
+      if (type === 'debt') {
+        const { error } = await supabase.from('debts').delete().eq('id', id)
+        if (error) throw error
+        
+        toast({
+          title: 'Excluído!',
+          description: 'Dívida excluída com sucesso.',
+        })
+      } else {
+        const table = type === 'income' ? 'incomes' : 'expenses'
+        const { error } = await supabase.from(table).delete().eq('id', id)
+        if (error) throw error
 
-      if (error) throw error
-
-      toast({
-        title: 'Excluído!',
-        description: `${type === 'income' ? 'Entrada' : 'Gasto'} excluído com sucesso.`,
-      })
+        toast({
+          title: 'Excluído!',
+          description: `${type === 'income' ? 'Entrada' : 'Gasto'} excluído com sucesso.`,
+        })
+      }
 
       onRefresh()
     } catch (error: any) {
@@ -179,6 +274,16 @@ export default function TransactionsList({
                 {transaction.status === 'pendente' && (
                   <Badge variant="outline" className="text-xs border-0 text-warning">
                     Pendente
+                  </Badge>
+                )}
+                {transaction.status === 'atrasada' && (
+                  <Badge variant="outline" className="text-xs border-0 text-error">
+                    Atrasada
+                  </Badge>
+                )}
+                {transaction.isDebt && (
+                  <Badge variant="outline" className="text-xs border-0 text-error">
+                    Dívida
                   </Badge>
                 )}
                 <Button

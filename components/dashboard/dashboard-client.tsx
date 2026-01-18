@@ -158,8 +158,53 @@ export default function DashboardClient({
       return date.getMonth() === currentMonth && date.getFullYear() === currentYear
     })
 
+    // Calcular despesas mensais de dívidas do mês atual
+    const filteredDebts = debts.filter((d) =>
+      accountFilter === 'all' ? true : d.conta === accountFilter
+    )
+
+    const currentMonthDebtPayments = filteredDebts
+      .filter((d) => {
+        if (d.status === 'paga') return false
+        
+        const valorTotal = Number(d.valor_total)
+        const valorPago = Number(d.valor_pago)
+        const valorRestante = valorTotal - valorPago
+        
+        if (valorRestante <= 0) return false
+        
+        // Verificar se a dívida tem vencimento no mês atual
+        if (d.data_vencimento) {
+          const vencimento = new Date(d.data_vencimento)
+          return vencimento.getMonth() === currentMonth && vencimento.getFullYear() === currentYear
+        }
+        
+        // Se não tem vencimento, verificar se começou no mês atual
+        const inicio = new Date(d.data_inicio)
+        return inicio.getMonth() === currentMonth && inicio.getFullYear() === currentYear
+      })
+      .reduce((sum, d) => {
+        const valorTotal = Number(d.valor_total)
+        const valorPago = Number(d.valor_pago)
+        const valorRestante = valorTotal - valorPago
+        
+        // Se tem parcelas, calcular valor mensal
+        if (d.parcelas_total && d.parcelas_total > 0) {
+          const parcelasPagas = d.parcelas_pagas || 0
+          const parcelasRestantes = d.parcelas_total - parcelasPagas
+          
+          if (parcelasRestantes > 0) {
+            const valorMensal = valorRestante / parcelasRestantes
+            return sum + valorMensal
+          }
+        }
+        
+        // Se não tem parcelas, considerar o valor restante
+        return sum + valorRestante
+      }, 0)
+
     const totalIncomes = currentMonthIncomes.reduce((sum, i) => sum + Number(i.valor), 0)
-    const totalExpenses = currentMonthExpenses.reduce((sum, e) => sum + Number(e.valor), 0)
+    const totalExpenses = currentMonthExpenses.reduce((sum, e) => sum + Number(e.valor), 0) + currentMonthDebtPayments
     const balance = totalIncomes - totalExpenses
 
     // Calcular apenas entradas recorrentes que ainda não foram contabilizadas no mês atual
@@ -192,11 +237,7 @@ export default function DashboardClient({
       })
       .reduce((sum, e) => sum + Number(e.valor), 0)
 
-    // Calcular valor mensal das dívidas abertas
-    const filteredDebts = debts.filter((d) =>
-      accountFilter === 'all' ? true : d.conta === accountFilter
-    )
-
+    // Calcular valor mensal das dívidas abertas que ainda não foram contabilizadas no mês atual
     const monthlyDebtPayments = filteredDebts
       .filter((d) => d.status === 'aberta' || d.status === 'atrasada')
       .reduce((sum, d) => {
@@ -253,13 +294,15 @@ export default function DashboardClient({
   }
 
   const refreshData = async () => {
-    const [incomesResult, expensesResult] = await Promise.all([
+    const [incomesResult, expensesResult, debtsResult] = await Promise.all([
       supabase.from('incomes').select('*').order('data', { ascending: false }),
       supabase.from('expenses').select('*').order('data', { ascending: false }),
+      supabase.from('debts').select('*').order('created_at', { ascending: false }),
     ])
 
     if (incomesResult.data) setIncomes(incomesResult.data)
     if (expensesResult.data) setExpenses(expensesResult.data)
+    if (debtsResult.data) setDebts(debtsResult.data)
   }
 
   const refreshDebts = async () => {
@@ -518,8 +561,11 @@ export default function DashboardClient({
             <TransactionsList
               incomes={incomes}
               expenses={expenses}
+              debts={debts}
               accountFilter={accountFilter}
               onRefresh={refreshData}
+              currentMonth={currentMonth}
+              currentYear={currentYear}
             />
           </>
         )}
