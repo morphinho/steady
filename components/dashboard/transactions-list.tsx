@@ -269,16 +269,18 @@ export default function TransactionsList({
   }
 
   return (
-    <div className="bg-surface rounded-2xl">
-      <div className="pb-3 px-4 pt-4">
-        <h3 className="text-base font-medium text-textPrimary">Transações</h3>
-      </div>
-      <div className="space-y-2 px-4 pb-4">
-        {transactionsWithData.map(({ transaction, income, expense, debt }) => (
-          <div
-            key={transaction.id}
-            className="flex items-start gap-3 p-3 rounded-xl hover:bg-surfaceMuted transition-fast"
-          >
+    <>
+      <div className="bg-surface rounded-2xl">
+        <div className="pb-3 px-4 pt-4">
+          <h3 className="text-base font-medium text-textPrimary">Transações</h3>
+        </div>
+        <div className="space-y-2 px-4 pb-4">
+          {transactionsWithData.map(({ transaction, income, expense, debt }) => (
+            <div
+              key={transaction.id}
+              onClick={() => setSelectedTransaction({ transaction, income, expense, debt })}
+              className="flex items-start gap-3 p-3 rounded-xl hover:bg-surfaceMuted transition-fast cursor-pointer"
+            >
             {transaction.type === 'income' ? (
               <ArrowUpCircle className="w-4 h-4 text-success flex-shrink-0 mt-0.5" />
             ) : (
@@ -339,17 +341,15 @@ export default function TransactionsList({
         </div>
       </div>
 
-      {selectedTransaction && (
-        <TransactionDetailModal
-          open={true}
-          onClose={() => setSelectedTransaction(null)}
-          transaction={selectedTransaction.transaction}
-          income={selectedTransaction.income}
-          expense={selectedTransaction.expense}
-          debt={selectedTransaction.debt}
-          onRefresh={onRefresh}
-        />
-      )}
+      <TransactionDetailModal
+        open={selectedTransaction !== null}
+        onClose={() => setSelectedTransaction(null)}
+        transaction={selectedTransaction?.transaction || null}
+        income={selectedTransaction?.income}
+        expense={selectedTransaction?.expense}
+        debt={selectedTransaction?.debt}
+        onRefresh={onRefresh}
+      />
     </>
   )
 }
