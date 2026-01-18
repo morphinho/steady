@@ -492,6 +492,12 @@ export default function DashboardClient({
             />
           </>
         )}
+
+        {activeTab === 'profile' && (
+          <div className="animate-fade-in">
+            <ProfileClient user={user} profile={profile} />
+          </div>
+        )}
       </main>
 
       <AddIncomeModal
