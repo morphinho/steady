@@ -162,19 +162,38 @@ export default function DashboardClient({
     const totalExpenses = currentMonthExpenses.reduce((sum, e) => sum + Number(e.valor), 0)
     const balance = totalIncomes - totalExpenses
 
-    const recurringIncomes = filteredIncomes
-      .filter((i) => i.tipo === 'recorrente')
+    // Calcular apenas entradas recorrentes que ainda não foram contabilizadas no mês atual
+    const recurringIncomesNotInMonth = filteredIncomes
+      .filter((i) => {
+        const isRecurring = i.tipo === 'recorrente'
+        const date = new Date(i.data)
+        const isNotCurrentMonth = date.getMonth() !== currentMonth || date.getFullYear() !== currentYear
+        return isRecurring && isNotCurrentMonth
+      })
       .reduce((sum, i) => sum + Number(i.valor), 0)
 
-    const fixedExpenses = filteredExpenses
-      .filter((e) => e.tipo === 'fixo' || e.recorrente)
+    // Calcular apenas gastos fixos que ainda não foram contabilizados no mês atual
+    const fixedExpensesNotInMonth = filteredExpenses
+      .filter((e) => {
+        const isFixed = e.tipo === 'fixo' || e.recorrente
+        const date = new Date(e.data)
+        const isNotCurrentMonth = date.getMonth() !== currentMonth || date.getFullYear() !== currentYear
+        return isFixed && isNotCurrentMonth
+      })
       .reduce((sum, e) => sum + Number(e.valor), 0)
 
-    const pendingExpenses = filteredExpenses
-      .filter((e) => e.status === 'pendente')
+    // Calcular apenas gastos pendentes que ainda não foram contabilizados no mês atual
+    const pendingExpensesNotInMonth = filteredExpenses
+      .filter((e) => {
+        const isPending = e.status === 'pendente'
+        const date = new Date(e.data)
+        const isNotCurrentMonth = date.getMonth() !== currentMonth || date.getFullYear() !== currentYear
+        return isPending && isNotCurrentMonth
+      })
       .reduce((sum, e) => sum + Number(e.valor), 0)
 
-    const projectedBalance = balance + recurringIncomes - fixedExpenses - pendingExpenses
+    // Projetado = saldo atual + valores recorrentes/fixos/pendentes que ainda não foram contabilizados
+    const projectedBalance = balance + recurringIncomesNotInMonth - fixedExpensesNotInMonth - pendingExpensesNotInMonth
 
     return {
       totalIncomes,
