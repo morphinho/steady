@@ -115,13 +115,13 @@ export default function AddExpenseModal({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>Novo Gasto</DialogTitle>
+          <DialogTitle className="text-base">Novo Gasto</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="valor">Valor</Label>
+        <form onSubmit={handleSubmit} className="space-y-3">
+          <div className="space-y-1.5">
+            <Label htmlFor="valor" className="text-xs">Valor</Label>
             <Input
               id="valor"
               type="number"
@@ -129,29 +129,31 @@ export default function AddExpenseModal({
               placeholder="0.00"
               value={formData.valor}
               onChange={(e) => setFormData({ ...formData, valor: e.target.value })}
+              className="h-9 text-sm"
               required
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="data">Data</Label>
+          <div className="space-y-1.5">
+            <Label htmlFor="data" className="text-xs">Data</Label>
             <Input
               id="data"
               type="date"
               value={formData.data}
               onChange={(e) => setFormData({ ...formData, data: e.target.value })}
+              className="h-9 text-sm"
               required
             />
           </div>
 
-          <div className="space-y-2">
-            <Label>Categoria</Label>
+          <div className="space-y-1.5">
+            <Label className="text-xs">Categoria</Label>
             <Select
               value={formData.categoria}
               onValueChange={(value) => setFormData({ ...formData, categoria: value })}
               required
             >
-              <SelectTrigger>
+              <SelectTrigger className="h-9 text-sm">
                 <SelectValue placeholder="Selecione..." />
               </SelectTrigger>
               <SelectContent>
@@ -164,27 +166,28 @@ export default function AddExpenseModal({
             </Select>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="descricao">Descrição</Label>
+          <div className="space-y-1.5">
+            <Label htmlFor="descricao" className="text-xs">Descrição (opcional)</Label>
             <Textarea
               id="descricao"
               placeholder="Opcional..."
               value={formData.descricao}
               onChange={(e) => setFormData({ ...formData, descricao: e.target.value })}
               rows={2}
+              className="text-sm resize-none"
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label>Tipo</Label>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label className="text-xs">Tipo</Label>
               <Select
                 value={formData.tipo}
                 onValueChange={(value: 'fixo' | 'variavel') =>
                   setFormData({ ...formData, tipo: value })
                 }
               >
-                <SelectTrigger>
+                <SelectTrigger className="h-9 text-sm">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -194,15 +197,15 @@ export default function AddExpenseModal({
               </Select>
             </div>
 
-            <div className="space-y-2">
-              <Label>Status</Label>
+            <div className="space-y-1.5">
+              <Label className="text-xs">Status</Label>
               <Select
                 value={formData.status}
                 onValueChange={(value: 'pago' | 'pendente') =>
                   setFormData({ ...formData, status: value })
                 }
               >
-                <SelectTrigger>
+                <SelectTrigger className="h-9 text-sm">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -213,15 +216,15 @@ export default function AddExpenseModal({
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label>Conta</Label>
+          <div className="space-y-1.5">
+            <Label className="text-xs">Conta</Label>
             <Select
               value={formData.conta}
               onValueChange={(value: 'pessoal' | 'negocio') =>
                 setFormData({ ...formData, conta: value })
               }
             >
-              <SelectTrigger>
+              <SelectTrigger className="h-9 text-sm">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -231,7 +234,7 @@ export default function AddExpenseModal({
             </Select>
           </div>
 
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 py-1">
             <Checkbox
               id="recorrente"
               checked={formData.recorrente}
@@ -239,12 +242,12 @@ export default function AddExpenseModal({
                 setFormData({ ...formData, recorrente: checked as boolean })
               }
             />
-            <Label htmlFor="recorrente" className="cursor-pointer">
+            <Label htmlFor="recorrente" className="cursor-pointer text-xs">
               Gasto recorrente
             </Label>
           </div>
 
-          <div className="flex gap-3 pt-4">
+          <div className="flex gap-2 pt-2">
             <Button type="button" variant="outline" onClick={onClose} className="flex-1">
               Cancelar
             </Button>

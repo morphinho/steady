@@ -93,13 +93,13 @@ export default function AddIncomeModal({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>Nova Entrada</DialogTitle>
+          <DialogTitle className="text-base">Nova Entrada</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="valor">Valor</Label>
+        <form onSubmit={handleSubmit} className="space-y-3">
+          <div className="space-y-1.5">
+            <Label htmlFor="valor" className="text-xs">Valor</Label>
             <Input
               id="valor"
               type="number"
@@ -107,52 +107,56 @@ export default function AddIncomeModal({
               placeholder="0.00"
               value={formData.valor}
               onChange={(e) => setFormData({ ...formData, valor: e.target.value })}
+              className="h-9 text-sm"
               required
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="data">Data</Label>
+          <div className="space-y-1.5">
+            <Label htmlFor="data" className="text-xs">Data</Label>
             <Input
               id="data"
               type="date"
               value={formData.data}
               onChange={(e) => setFormData({ ...formData, data: e.target.value })}
+              className="h-9 text-sm"
               required
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="fonte">Fonte</Label>
+          <div className="space-y-1.5">
+            <Label htmlFor="fonte" className="text-xs">Fonte</Label>
             <Input
               id="fonte"
               placeholder="Ex: Salário, Freelance..."
               value={formData.fonte}
               onChange={(e) => setFormData({ ...formData, fonte: e.target.value })}
+              className="h-9 text-sm"
               required
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="projeto">Projeto</Label>
+          <div className="space-y-1.5">
+            <Label htmlFor="projeto" className="text-xs">Projeto (opcional)</Label>
             <Input
               id="projeto"
               placeholder="Ex: Morphion, Freelance..."
               value={formData.projeto}
               onChange={(e) => setFormData({ ...formData, projeto: e.target.value })}
+              className="h-9 text-sm"
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label>Tipo</Label>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label className="text-xs">Tipo</Label>
               <Select
                 value={formData.tipo}
                 onValueChange={(value: 'recorrente' | 'pontual') =>
                   setFormData({ ...formData, tipo: value })
                 }
               >
-                <SelectTrigger>
+                <SelectTrigger className="h-9 text-sm">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -162,15 +166,15 @@ export default function AddIncomeModal({
               </Select>
             </div>
 
-            <div className="space-y-2">
-              <Label>Conta</Label>
+            <div className="space-y-1.5">
+              <Label className="text-xs">Conta</Label>
               <Select
                 value={formData.conta}
                 onValueChange={(value: 'pessoal' | 'negocio') =>
                   setFormData({ ...formData, conta: value })
                 }
               >
-                <SelectTrigger>
+                <SelectTrigger className="h-9 text-sm">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -181,7 +185,7 @@ export default function AddIncomeModal({
             </div>
           </div>
 
-          <div className="flex gap-3 pt-4">
+          <div className="flex gap-2 pt-2">
             <Button type="button" variant="outline" onClick={onClose} className="flex-1">
               Cancelar
             </Button>

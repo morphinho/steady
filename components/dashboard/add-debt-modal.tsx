@@ -110,36 +110,38 @@ export default function AddDebtModal({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>Nova Dívida</DialogTitle>
+          <DialogTitle className="text-base">Nova Dívida</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="nome">Nome da Dívida</Label>
+        <form onSubmit={handleSubmit} className="space-y-3">
+          <div className="space-y-1.5">
+            <Label htmlFor="nome" className="text-xs">Nome da Dívida</Label>
             <Input
               id="nome"
-              placeholder="Ex: Empréstimo Banco, Cartão de Crédito..."
+              placeholder="Ex: Empréstimo Banco..."
               value={formData.nome}
               onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
+              className="h-9 text-sm"
               required
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="credor">Credor</Label>
+          <div className="space-y-1.5">
+            <Label htmlFor="credor" className="text-xs">Credor</Label>
             <Input
               id="credor"
               placeholder="Ex: Banco X, João Silva..."
               value={formData.credor}
               onChange={(e) => setFormData({ ...formData, credor: e.target.value })}
+              className="h-9 text-sm"
               required
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="valor_total">Valor Total</Label>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label htmlFor="valor_total" className="text-xs">Valor Total</Label>
               <Input
                 id="valor_total"
                 type="number"
@@ -147,12 +149,13 @@ export default function AddDebtModal({
                 placeholder="0.00"
                 value={formData.valor_total}
                 onChange={(e) => setFormData({ ...formData, valor_total: e.target.value })}
+                className="h-9 text-sm"
                 required
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="valor_pago">Já Pago</Label>
+            <div className="space-y-1.5">
+              <Label htmlFor="valor_pago" className="text-xs">Já Pago</Label>
               <Input
                 id="valor_pago"
                 type="number"
@@ -160,47 +163,51 @@ export default function AddDebtModal({
                 placeholder="0.00"
                 value={formData.valor_pago}
                 onChange={(e) => setFormData({ ...formData, valor_pago: e.target.value })}
+                className="h-9 text-sm"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="data_inicio">Data de Início</Label>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label htmlFor="data_inicio" className="text-xs">Data Início</Label>
               <Input
                 id="data_inicio"
                 type="date"
                 value={formData.data_inicio}
                 onChange={(e) => setFormData({ ...formData, data_inicio: e.target.value })}
+                className="h-9 text-sm"
                 required
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="data_vencimento">Vencimento</Label>
+            <div className="space-y-1.5">
+              <Label htmlFor="data_vencimento" className="text-xs">Vencimento</Label>
               <Input
                 id="data_vencimento"
                 type="date"
                 value={formData.data_vencimento}
                 onChange={(e) => setFormData({ ...formData, data_vencimento: e.target.value })}
+                className="h-9 text-sm"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="parcelas_total">Total de Parcelas</Label>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label htmlFor="parcelas_total" className="text-xs">Parcelas</Label>
               <Input
                 id="parcelas_total"
                 type="number"
                 placeholder="Ex: 12"
                 value={formData.parcelas_total}
                 onChange={(e) => setFormData({ ...formData, parcelas_total: e.target.value })}
+                className="h-9 text-sm"
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="taxa_juros">Taxa de Juros (%)</Label>
+            <div className="space-y-1.5">
+              <Label htmlFor="taxa_juros" className="text-xs">Juros (%)</Label>
               <Input
                 id="taxa_juros"
                 type="number"
@@ -208,20 +215,21 @@ export default function AddDebtModal({
                 placeholder="0.00"
                 value={formData.taxa_juros}
                 onChange={(e) => setFormData({ ...formData, taxa_juros: e.target.value })}
+                className="h-9 text-sm"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label>Status</Label>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label className="text-xs">Status</Label>
               <Select
                 value={formData.status}
                 onValueChange={(value: 'aberta' | 'paga' | 'atrasada') =>
                   setFormData({ ...formData, status: value })
                 }
               >
-                <SelectTrigger>
+                <SelectTrigger className="h-9 text-sm">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -232,15 +240,15 @@ export default function AddDebtModal({
               </Select>
             </div>
 
-            <div className="space-y-2">
-              <Label>Conta</Label>
+            <div className="space-y-1.5">
+              <Label className="text-xs">Conta</Label>
               <Select
                 value={formData.conta}
                 onValueChange={(value: 'pessoal' | 'negocio') =>
                   setFormData({ ...formData, conta: value })
                 }
               >
-                <SelectTrigger>
+                <SelectTrigger className="h-9 text-sm">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -251,18 +259,19 @@ export default function AddDebtModal({
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="observacoes">Observações</Label>
+          <div className="space-y-1.5">
+            <Label htmlFor="observacoes" className="text-xs">Observações (opcional)</Label>
             <Textarea
               id="observacoes"
               placeholder="Notas adicionais..."
               value={formData.observacoes}
               onChange={(e) => setFormData({ ...formData, observacoes: e.target.value })}
-              rows={3}
+              rows={2}
+              className="text-sm resize-none"
             />
           </div>
 
-          <div className="flex gap-3 pt-4">
+          <div className="flex gap-2 pt-2">
             <Button type="button" variant="outline" onClick={onClose} className="flex-1">
               Cancelar
             </Button>
