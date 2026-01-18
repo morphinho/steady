@@ -91,7 +91,7 @@ export default function AddIncomeForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-3">
+    <form onSubmit={handleSubmit} className="space-y-3 w-full max-w-full">
       <div className="space-y-1.5">
         <Label htmlFor="valor" className="text-xs">Valor</Label>
         <Input
