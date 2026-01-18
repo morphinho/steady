@@ -240,7 +240,7 @@ export default function DashboardClient({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3 flex-1 min-w-0">
               <div className="p-1.5 rounded-xl bg-surfaceMuted flex-shrink-0">
-                <Image src="/steady logo.svg" alt="Logo" width={16} height={16} className="w-4 h-4" />
+                <Image src="/steady fav.svg" alt="Logo" width={16} height={16} className="w-4 h-4" />
               </div>
               <div className="flex-1 min-w-0">
                 <h1 className="text-base font-semibold text-textPrimary tracking-tight truncate">
@@ -270,7 +270,7 @@ export default function DashboardClient({
           <div className="flex items-center justify-between py-2.5">
             <div className="flex items-center gap-3">
               <div className="p-1.5 rounded-xl bg-surfaceMuted">
-                <Image src="/steady logo.svg" alt="Logo" width={16} height={16} className="w-4 h-4" />
+                <Image src="/steady fav.svg" alt="Logo" width={16} height={16} className="w-4 h-4" />
               </div>
               <div>
                 <h1 className="text-base font-semibold text-textPrimary tracking-tight">
