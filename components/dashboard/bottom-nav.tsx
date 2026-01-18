@@ -3,8 +3,8 @@
 import { Home, CreditCard, Plus, TrendingUp, Settings, User } from 'lucide-react'
 
 interface BottomNavProps {
-  activeTab: 'transactions' | 'debts'
-  onTabChange: (tab: 'transactions' | 'debts') => void
+  activeTab: 'transactions' | 'debts' | 'profile'
+  onTabChange: (tab: 'transactions' | 'debts' | 'profile') => void
   onAddClick: () => void
   onAnalysisClick?: () => void
   onSettingsClick?: () => void
@@ -61,7 +61,9 @@ export default function BottomNav({
 
         <button 
           onClick={onProfileClick}
-          className="flex flex-col items-center justify-center gap-1 text-textTertiary transition-fast active:scale-95"
+          className={`flex flex-col items-center justify-center gap-1 transition-fast active:scale-95 ${
+            activeTab === 'profile' ? 'text-textPrimary' : 'text-textTertiary'
+          }`}
         >
           <User className="w-5 h-5" />
           <span className="text-[10px] font-medium">Perfil</span>

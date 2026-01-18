@@ -106,7 +106,7 @@ export default function DashboardClient({
   const [expenses, setExpenses] = useState(initialExpenses)
   const [debts, setDebts] = useState<Debt[]>([])
   const [accountFilter, setAccountFilter] = useState<'all' | 'pessoal' | 'negocio'>('all')
-  const [activeTab, setActiveTab] = useState<'transactions' | 'debts'>('transactions')
+  const [activeTab, setActiveTab] = useState<'transactions' | 'debts' | 'profile'>('transactions')
   const [showIncomeModal, setShowIncomeModal] = useState(false)
   const [showExpenseModal, setShowExpenseModal] = useState(false)
   const [showDebtModal, setShowDebtModal] = useState(false)
@@ -239,7 +239,7 @@ export default function DashboardClient({
   }
 
   const handleProfileClick = () => {
-    router.push('/profile')
+    setActiveTab('profile')
   }
 
   return (

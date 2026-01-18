@@ -179,13 +179,13 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-3 sm:p-4 page-transition">
-      <Card className="w-full max-w-md border-0 rounded-2xl bg-surface p-4 sm:p-6 slide-up">
+    <div className="min-h-screen flex items-center justify-center bg-background p-4 sm:p-6 page-transition">
+      <Card className="w-full max-w-md border-0 rounded-2xl bg-surface p-5 sm:p-6 slide-up">
         <CardHeader className="space-y-1 text-center px-0 pt-0">
           <div className="flex flex-col items-center mb-4 sm:mb-6 pt-4 sm:pt-6">
             <div className="mb-3">
               <h1 
-                className="text-4xl sm:text-5xl font-bold text-textPrimary"
+                className="text-4xl sm:text-5xl font-bold text-brandPrimary"
                 style={{ fontFamily: 'var(--font-cascadia-code)', fontWeight: 700 }}
               >
                 Steady
@@ -219,6 +219,7 @@ export default function LoginPage() {
                       placeholder="Seu nome"
                       value={firstName}
                       onChange={(e) => setFirstName(e.target.value)}
+                      style={{ fontSize: '16px' }}
                       required={isSignUp}
                     />
                   </div>
@@ -230,6 +231,7 @@ export default function LoginPage() {
                       placeholder="Seu sobrenome"
                       value={lastName}
                       onChange={(e) => setLastName(e.target.value)}
+                      style={{ fontSize: '16px' }}
                       required={isSignUp}
                     />
                   </div>
@@ -242,6 +244,7 @@ export default function LoginPage() {
                     placeholder="(00) 00000-0000"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
+                    style={{ fontSize: '16px' }}
                   />
                 </div>
               </>
@@ -254,6 +257,7 @@ export default function LoginPage() {
                 placeholder="seu@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                style={{ fontSize: '16px' }}
                 required
               />
             </div>
@@ -265,6 +269,7 @@ export default function LoginPage() {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                style={{ fontSize: '16px' }}
                 required
               />
             </div>

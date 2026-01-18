@@ -311,41 +311,8 @@ export default function ProfileClient({ user, profile: initialProfile }: Profile
   }
 
   return (
-    <div className="min-h-screen bg-background pb-20 md:pb-0 page-transition">
-      {/* Header Mobile */}
-      <header className="md:hidden fixed top-0 left-0 right-0 z-[100] bg-surface">
-        <div className="px-4 py-3">
-          <div className="flex items-center justify-between">
-            <button
-              onClick={() => router.back()}
-              className="p-2 rounded-xl hover:bg-surfaceMuted transition-fast"
-            >
-              <ArrowLeft className="w-5 h-5 text-textPrimary" />
-            </button>
-            <h1 className="text-lg font-semibold text-textPrimary">Perfil</h1>
-            <div className="w-9" />
-          </div>
-        </div>
-      </header>
-
-      {/* Header Desktop */}
-      <header className="hidden md:block sticky top-0 z-[100] bg-surface">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex items-center justify-between py-4">
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => router.back()}
-                className="p-2 rounded-xl hover:bg-surfaceMuted transition-fast"
-              >
-                <ArrowLeft className="w-5 h-5 text-textPrimary" />
-              </button>
-              <h1 className="text-lg font-semibold text-textPrimary">Perfil</h1>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <main className="max-w-3xl mx-auto px-3 sm:px-6 lg:px-8 pt-16 md:pt-6 pb-20 md:pb-8">
+    <div className="bg-background page-transition">
+      <main className="max-w-3xl mx-auto px-3 sm:px-6 lg:px-8 pt-0 pb-0">
         <div className="space-y-6">
           {/* Card de Foto de Perfil */}
           <Card className="bg-surface border-0 rounded-2xl">
