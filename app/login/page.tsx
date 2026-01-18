@@ -157,14 +157,17 @@ export default function LoginPage() {
       <Card className="w-full max-w-md border-0 rounded-2xl bg-surface p-4 sm:p-6 slide-up">
         <CardHeader className="space-y-1 text-center px-0 pt-0">
           <div className="flex flex-col items-center mb-4 sm:mb-6 pt-4 sm:pt-6">
-            <Image
-              src="/steady logo.svg"
-              alt="Steady Logo"
-              width={200}
-              height={80}
-              className="h-auto w-auto max-w-[200px] mb-3"
-              priority
-            />
+            <div className="mb-3" style={{ fontFamily: 'var(--font-cascadia-code)' }}>
+              <Image
+                src="/steady logo.svg"
+                alt="Steady Logo"
+                width={200}
+                height={80}
+                className="h-auto w-auto max-w-[200px]"
+                priority
+                unoptimized
+              />
+            </div>
             <p className="text-sm sm:text-base text-textSecondary font-medium">
               Focus your money.
             </p>
