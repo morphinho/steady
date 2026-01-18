@@ -506,47 +506,47 @@ export default function DashboardClient({
 
       {/* Modal de escolha de tipo */}
       <Dialog open={showAddChoiceModal} onOpenChange={setShowAddChoiceModal}>
-        <DialogContent className="sm:max-w-[400px]">
+        <DialogContent className="max-w-sm">
           <DialogHeader>
-            <DialogTitle>O que deseja adicionar?</DialogTitle>
+            <DialogTitle className="text-base">O que deseja adicionar?</DialogTitle>
           </DialogHeader>
-          <div className="grid gap-3 py-4">
+          <div className="grid gap-2 py-2">
             <button
               onClick={() => handleAddChoice('income')}
-              className="flex items-center gap-4 p-4 rounded-2xl bg-surfaceMuted hover:bg-surfaceElevated transition-fast text-left"
+              className="flex items-center gap-3 p-3 rounded-xl bg-surfaceMuted hover:bg-surfaceElevated transition-fast text-left active:scale-[0.98]"
             >
-              <div className="p-2 rounded-xl bg-success/10">
-                <ArrowUpCircle className="w-6 h-6 text-success" />
+              <div className="p-1.5 rounded-lg bg-success/10 flex-shrink-0">
+                <ArrowUpCircle className="w-5 h-5 text-success" />
               </div>
-              <div>
-                <p className="font-semibold text-textPrimary">Nova Entrada</p>
-                <p className="text-sm text-textSecondary">Adicionar receita</p>
+              <div className="min-w-0">
+                <p className="font-semibold text-sm text-textPrimary">Nova Entrada</p>
+                <p className="text-xs text-textSecondary">Adicionar receita</p>
               </div>
             </button>
 
             <button
               onClick={() => handleAddChoice('expense')}
-              className="flex items-center gap-4 p-4 rounded-2xl bg-surfaceMuted hover:bg-surfaceElevated transition-fast text-left"
+              className="flex items-center gap-3 p-3 rounded-xl bg-surfaceMuted hover:bg-surfaceElevated transition-fast text-left active:scale-[0.98]"
             >
-              <div className="p-2 rounded-xl bg-error/10">
-                <ArrowDownCircle className="w-6 h-6 text-error" />
+              <div className="p-1.5 rounded-lg bg-error/10 flex-shrink-0">
+                <ArrowDownCircle className="w-5 h-5 text-error" />
               </div>
-              <div>
-                <p className="font-semibold text-textPrimary">Novo Gasto</p>
-                <p className="text-sm text-textSecondary">Adicionar despesa</p>
+              <div className="min-w-0">
+                <p className="font-semibold text-sm text-textPrimary">Novo Gasto</p>
+                <p className="text-xs text-textSecondary">Adicionar despesa</p>
               </div>
             </button>
 
             <button
               onClick={() => handleAddChoice('debt')}
-              className="flex items-center gap-4 p-4 rounded-2xl bg-surfaceMuted hover:bg-surfaceElevated transition-fast text-left"
+              className="flex items-center gap-3 p-3 rounded-xl bg-surfaceMuted hover:bg-surfaceElevated transition-fast text-left active:scale-[0.98]"
             >
-              <div className="p-2 rounded-xl bg-warning/10">
-                <CreditCard className="w-6 h-6 text-warning" />
+              <div className="p-1.5 rounded-lg bg-warning/10 flex-shrink-0">
+                <CreditCard className="w-5 h-5 text-warning" />
               </div>
-              <div>
-                <p className="font-semibold text-textPrimary">Nova Dívida</p>
-                <p className="text-sm text-textSecondary">Adicionar dívida</p>
+              <div className="min-w-0">
+                <p className="font-semibold text-sm text-textPrimary">Nova Dívida</p>
+                <p className="text-xs text-textSecondary">Adicionar dívida</p>
               </div>
             </button>
           </div>

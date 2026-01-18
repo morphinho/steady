@@ -187,27 +187,27 @@ export default function UpdateDebtModal({
 
         <div className="bg-surfaceMuted p-3 rounded-xl space-y-2 mb-3">
           <div className="flex justify-between items-center">
-            <span className="text-sm text-slate-600">Progresso do Pagamento</span>
-            <span className="text-sm font-semibold text-slate-900">
+            <span className="text-xs text-textSecondary">Progresso do Pagamento</span>
+            <span className="text-xs font-semibold text-textPrimary">
               {percentualPago.toFixed(1)}%
             </span>
           </div>
-          <div className="w-full bg-slate-200 rounded-full h-3">
+          <div className="w-full bg-surface rounded-full h-2">
             <div
-              className="bg-green-600 h-3 rounded-full transition-all"
+              className="bg-success h-2 rounded-full transition-all"
               style={{ width: `${Math.min(percentualPago, 100)}%` }}
             />
           </div>
-          <div className="flex justify-between text-sm">
-            <span className="text-green-600 font-medium">
+          <div className="flex justify-between text-xs">
+            <span className="text-success font-medium">
               Pago: R$ {parseFloat(formData.valor_pago).toFixed(2)}
             </span>
-            <span className="text-red-600 font-medium">
+            <span className="text-error font-medium">
               Falta: R$ {valorRestante.toFixed(2)}
             </span>
           </div>
           {formData.parcelas_total && (
-            <div className="text-center text-sm text-slate-600">
+            <div className="text-center text-xs text-textSecondary">
               Parcelas: {formData.parcelas_pagas}/{formData.parcelas_total}
             </div>
           )}
