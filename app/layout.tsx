@@ -6,7 +6,18 @@ export const metadata: Metadata = {
   title: 'Steady',
   description: 'Focus your money. Gerencie suas finanças pessoais e de negócios',
   icons: {
-    icon: '/steady fav.svg',
+    icon: [
+      { url: '/steady fav.svg', type: 'image/svg+xml' },
+      { url: '/steady fav.svg', type: 'image/svg+xml', sizes: 'any' },
+    ],
+    apple: [
+      { url: '/steady fav.svg', sizes: '180x180', type: 'image/svg+xml' },
+    ],
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Steady',
   },
   openGraph: {
     images: [
@@ -34,6 +45,11 @@ export default function RootLayout({
     <html lang="pt-BR" suppressHydrationWarning>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="Steady" />
+        <link rel="apple-touch-icon" href="/steady fav.svg" />
+        <link rel="manifest" href="/manifest.json" />
       </head>
       <body>
         <ThemeProvider>{children}</ThemeProvider>

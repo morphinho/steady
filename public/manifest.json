@@ -1,0 +1,19 @@
+{
+  "name": "Steady",
+  "short_name": "Steady",
+  "description": "Focus your money. Gerencie suas finanças pessoais e de negócios",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0B0D0C",
+  "theme_color": "#A6FF3C",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/steady fav.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
+
