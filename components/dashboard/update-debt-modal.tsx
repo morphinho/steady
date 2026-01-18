@@ -273,31 +273,29 @@ export default function UpdateDebtModal({
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1.5">
-              <Label htmlFor="data_inicio" className="text-xs">Data Início</Label>
-              <Input
-                id="data_inicio"
-                type="date"
-                value={formData.data_inicio}
-                onChange={(e) => setFormData({ ...formData, data_inicio: e.target.value })}
-                className="h-9 text-sm w-full"
-                style={{ fontSize: '16px', maxWidth: '100%' }}
-                required
-              />
-            </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="data_inicio" className="text-xs">Data de Início</Label>
+            <Input
+              id="data_inicio"
+              type="date"
+              value={formData.data_inicio}
+              onChange={(e) => setFormData({ ...formData, data_inicio: e.target.value })}
+              className="h-9 text-sm w-full"
+              style={{ fontSize: '16px', maxWidth: '100%' }}
+              required
+            />
+          </div>
 
-            <div className="space-y-1.5">
-              <Label htmlFor="data_vencimento" className="text-xs">Vencimento</Label>
-              <Input
-                id="data_vencimento"
-                type="date"
-                value={formData.data_vencimento}
-                onChange={(e) => setFormData({ ...formData, data_vencimento: e.target.value })}
-                className="h-9 text-sm w-full"
-                style={{ fontSize: '16px', maxWidth: '100%' }}
-              />
-            </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="data_vencimento" className="text-xs">Data de Vencimento (opcional)</Label>
+            <Input
+              id="data_vencimento"
+              type="date"
+              value={formData.data_vencimento}
+              onChange={(e) => setFormData({ ...formData, data_vencimento: e.target.value })}
+              className="h-9 text-sm w-full"
+              style={{ fontSize: '16px', maxWidth: '100%' }}
+            />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
