@@ -125,7 +125,12 @@ export default function DashboardClient({
     }
 
     loadData()
-  }, [])
+    
+    // Salvar perfil no cache quando disponível
+    if (profile) {
+      setCachedProfile(profile)
+    }
+  }, [profile, supabase])
 
   const currentMonth = new Date().getMonth()
   const currentYear = new Date().getFullYear()
