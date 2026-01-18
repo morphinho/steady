@@ -216,12 +216,25 @@ export default function DashboardClient({
 
   const handleAddChoice = (type: 'income' | 'expense' | 'debt') => {
     setShowAddChoiceModal(false)
-    if (type === 'income') {
-      setShowIncomeModal(true)
-    } else if (type === 'expense') {
-      setShowExpenseModal(true)
+    
+    // No mobile, redirecionar para páginas separadas
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      if (type === 'income') {
+        router.push('/dashboard/add-income')
+      } else if (type === 'expense') {
+        router.push('/dashboard/add-expense')
+      } else {
+        router.push('/dashboard/add-debt')
+      }
     } else {
-      setShowDebtModal(true)
+      // No desktop, usar modais
+      if (type === 'income') {
+        setShowIncomeModal(true)
+      } else if (type === 'expense') {
+        setShowExpenseModal(true)
+      } else {
+        setShowDebtModal(true)
+      }
     }
   }
 
