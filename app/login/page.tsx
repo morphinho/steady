@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -157,16 +156,13 @@ export default function LoginPage() {
       <Card className="w-full max-w-md border-0 rounded-2xl bg-surface p-4 sm:p-6 slide-up">
         <CardHeader className="space-y-1 text-center px-0 pt-0">
           <div className="flex flex-col items-center mb-4 sm:mb-6 pt-4 sm:pt-6">
-            <div className="mb-3" style={{ fontFamily: 'var(--font-cascadia-code)' }}>
-              <Image
-                src="/steady logo.svg"
-                alt="Steady Logo"
-                width={200}
-                height={80}
-                className="h-auto w-auto max-w-[200px]"
-                priority
-                unoptimized
-              />
+            <div className="mb-3">
+              <h1 
+                className="text-4xl sm:text-5xl font-bold text-textPrimary"
+                style={{ fontFamily: 'var(--font-cascadia-code)', fontWeight: 700 }}
+              >
+                Steady
+              </h1>
             </div>
             <p className="text-sm sm:text-base text-textSecondary font-medium">
               Focus your money.
