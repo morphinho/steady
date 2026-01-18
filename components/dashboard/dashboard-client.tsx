@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useMemo, useEffect } from 'react'
-import { User } from '@supabase/supabase-js'
+import { User as SupabaseUser } from '@supabase/supabase-js'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -85,7 +85,7 @@ interface Profile {
 }
 
 interface DashboardClientProps {
-  user: User
+  user: SupabaseUser
   profile: Profile | null
   incomes: Income[]
   expenses: Expense[]

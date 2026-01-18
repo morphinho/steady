@@ -204,17 +204,15 @@ export default function ProfileClient({ user, profile: initialProfile }: Profile
         console.error('Erro no upload:', uploadError)
         console.error('Detalhes do erro:', {
           message: uploadError.message,
-          statusCode: uploadError.statusCode,
-          error: uploadError.error,
         })
         
         // Verificar diferentes tipos de erro
         const errorMsg = uploadError.message || ''
-        const errorStatus = uploadError.statusCode || ''
+        const errorStatus = (uploadError as any).statusCode || ''
         
         if (errorMsg.includes('not found') || errorMsg.includes('Bucket') || errorMsg.includes('does not exist')) {
           throw new Error('Bucket "avatars" não encontrado. Verifique se o bucket foi criado no Supabase Dashboard (Storage > Create bucket > Nome: avatars > Public: true).')
-        } else if (errorMsg.includes('row-level security') || errorMsg.includes('RLS') || errorMsg.includes('policy') || errorMsg.includes('permission') || errorStatus === '42501' || errorStatus === 42501) {
+        } else if (errorMsg.includes('row-level security') || errorMsg.includes('RLS') || errorMsg.includes('policy') || errorMsg.includes('permission') || String(errorStatus) === '42501' || errorStatus === 42501) {
           throw new Error('Erro de permissão RLS. Execute a migração 20260121000000_fix_avatars_storage.sql no Supabase SQL Editor para corrigir as políticas de acesso.')
         } else if (errorMsg.includes('new row violates') || errorMsg.includes('violates row-level security')) {
           throw new Error('Erro de política RLS. Execute a migração 20260121000000_fix_avatars_storage.sql no Supabase SQL Editor. Verifique também se o bucket está marcado como público.')
