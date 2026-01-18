@@ -281,7 +281,8 @@ export default function UpdateDebtModal({
                 type="date"
                 value={formData.data_inicio}
                 onChange={(e) => setFormData({ ...formData, data_inicio: e.target.value })}
-                className="h-9 text-sm"
+                className="h-9 text-sm w-full"
+                style={{ fontSize: '16px', maxWidth: '100%' }}
                 required
               />
             </div>
@@ -293,7 +294,8 @@ export default function UpdateDebtModal({
                 type="date"
                 value={formData.data_vencimento}
                 onChange={(e) => setFormData({ ...formData, data_vencimento: e.target.value })}
-                className="h-9 text-sm"
+                className="h-9 text-sm w-full"
+                style={{ fontSize: '16px', maxWidth: '100%' }}
               />
             </div>
           </div>

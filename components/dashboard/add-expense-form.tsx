@@ -136,8 +136,8 @@ export default function AddExpenseForm({
           type="date"
           value={formData.data}
           onChange={(e) => setFormData({ ...formData, data: e.target.value })}
-          className="h-9 text-sm"
-          style={{ fontSize: '16px' }}
+          className="h-9 text-sm w-full"
+          style={{ fontSize: '16px', maxWidth: '100%' }}
           required
         />
       </div>
