@@ -50,22 +50,6 @@ type Debt = {
   observacoes: string | null
 }
 
-type Debt = {
-  id: string
-  nome: string
-  credor: string
-  valor_total: number
-  valor_pago: number
-  data_inicio: string
-  data_vencimento: string | null
-  taxa_juros: number
-  status: 'aberta' | 'paga' | 'atrasada'
-  conta: 'pessoal' | 'negocio'
-  parcelas_total: number | null
-  parcelas_pagas: number | null
-  observacoes: string | null
-}
-
 interface TransactionsListProps {
   incomes: Income[]
   expenses: Expense[]
