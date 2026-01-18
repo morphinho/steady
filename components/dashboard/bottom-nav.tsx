@@ -56,7 +56,7 @@ export default function BottomNav({
           className="flex flex-col items-center justify-center gap-1 text-textTertiary transition-fast active:scale-95"
         >
           <TrendingUp className="w-5 h-5" />
-          <span className="text-[10px] font-medium">Análise</span>
+          <span className="text-[10px] font-medium">Em breve</span>
         </button>
 
         <button 

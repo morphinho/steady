@@ -3,8 +3,8 @@ import type { Metadata } from 'next';
 import { ThemeProvider } from '@/lib/theme-context';
 
 export const metadata: Metadata = {
-  title: 'Controle Financeiro',
-  description: 'Gerencie suas finanças pessoais e de negócios',
+  title: 'Steady',
+  description: 'Focus your money. Gerencie suas finanças pessoais e de negócios',
   icons: {
     icon: '/steady fav.svg',
   },

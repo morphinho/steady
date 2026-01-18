@@ -188,22 +188,9 @@ export default function ProfileClient({ user, profile: initialProfile }: Profile
         }
       }
 
-      // Verificar se o bucket existe
-      const { data: buckets } = await supabase.storage.listBuckets()
-      const avatarsBucket = buckets?.find(b => b.name === 'avatars')
-      
-      if (!avatarsBucket) {
-        console.log('Bucket avatars não encontrado, tentando criar...')
-        const { error: createError } = await supabase.storage.createBucket('avatars', {
-          public: true,
-          fileSizeLimit: 5242880, // 5MB
-        })
-        
-        if (createError) {
-          console.error('Erro ao criar bucket:', createError)
-          throw new Error('Bucket "avatars" não encontrado. Por favor, crie o bucket manualmente no Supabase Dashboard (Storage > Create bucket > Nome: avatars > Public: true).')
-        }
-      }
+      // Tentar fazer upload diretamente - se o bucket não existir, o erro será mais específico
+      // Não verificamos a existência do bucket antes para evitar problemas de permissão
+      console.log('Iniciando upload para o bucket avatars...')
 
       // Fazer upload da nova imagem
       const { data: uploadData, error: uploadError } = await supabase.storage
@@ -215,13 +202,24 @@ export default function ProfileClient({ user, profile: initialProfile }: Profile
 
       if (uploadError) {
         console.error('Erro no upload:', uploadError)
+        console.error('Detalhes do erro:', {
+          message: uploadError.message,
+          statusCode: uploadError.statusCode,
+          error: uploadError.error,
+        })
         
-        if (uploadError.message.includes('not found') || uploadError.message.includes('Bucket')) {
-          throw new Error('Bucket "avatars" não encontrado. Por favor, crie o bucket no Supabase Storage.')
-        } else if (uploadError.message.includes('row-level security') || uploadError.message.includes('permission') || uploadError.message.includes('policy')) {
-          throw new Error('Erro de permissão. Verifique as políticas do Storage no Supabase. O bucket deve permitir upload para usuários autenticados.')
+        // Verificar diferentes tipos de erro
+        const errorMsg = uploadError.message || ''
+        const errorStatus = uploadError.statusCode || ''
+        
+        if (errorMsg.includes('not found') || errorMsg.includes('Bucket') || errorMsg.includes('does not exist')) {
+          throw new Error('Bucket "avatars" não encontrado. Verifique se o bucket foi criado no Supabase Dashboard (Storage > Create bucket > Nome: avatars > Public: true).')
+        } else if (errorMsg.includes('row-level security') || errorMsg.includes('RLS') || errorMsg.includes('policy') || errorMsg.includes('permission') || errorStatus === '42501' || errorStatus === 42501) {
+          throw new Error('Erro de permissão RLS. Execute a migração 20260121000000_fix_avatars_storage.sql no Supabase SQL Editor para corrigir as políticas de acesso.')
+        } else if (errorMsg.includes('new row violates') || errorMsg.includes('violates row-level security')) {
+          throw new Error('Erro de política RLS. Execute a migração 20260121000000_fix_avatars_storage.sql no Supabase SQL Editor. Verifique também se o bucket está marcado como público.')
         } else {
-          throw new Error(`Erro ao fazer upload: ${uploadError.message}`)
+          throw new Error(`Erro ao fazer upload: ${errorMsg || 'Erro desconhecido'}`)
         }
       }
 
