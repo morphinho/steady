@@ -21,10 +21,10 @@ export default function BottomNav({
 }: BottomNavProps) {
   return (
     <nav className="md:hidden fixed bottom-0 left-0 right-0 z-[100] bg-surface pb-safe">
-      <div className="grid grid-cols-5 h-20">
+      <div className="grid grid-cols-5 h-20 pb-4">
         <button
           onClick={() => onTabChange('transactions')}
-          className={`flex flex-col items-center justify-center gap-1 transition-fast active:scale-95 pb-2 ${
+          className={`flex flex-col items-center justify-center gap-1 transition-fast active:scale-95 ${
             activeTab === 'transactions' ? 'text-textPrimary' : 'text-textTertiary'
           }`}
         >
@@ -34,7 +34,7 @@ export default function BottomNav({
 
         <button
           onClick={() => onTabChange('debts')}
-          className={`flex flex-col items-center justify-center gap-1 transition-fast active:scale-95 pb-2 ${
+          className={`flex flex-col items-center justify-center gap-1 transition-fast active:scale-95 ${
             activeTab === 'debts' ? 'text-textPrimary' : 'text-textTertiary'
           }`}
         >
@@ -53,7 +53,7 @@ export default function BottomNav({
 
         <button 
           onClick={onAnalysisClick}
-          className="flex flex-col items-center justify-center gap-1 text-textTertiary transition-fast active:scale-95 pb-2"
+          className="flex flex-col items-center justify-center gap-1 text-textTertiary transition-fast active:scale-95"
         >
           <TrendingUp className="w-5 h-5" />
           <span className="text-[10px] font-medium">Em breve</span>
@@ -61,7 +61,7 @@ export default function BottomNav({
 
         <button 
           onClick={onProfileClick}
-          className="flex flex-col items-center justify-center gap-1 text-textTertiary transition-fast active:scale-95 pb-2"
+          className="flex flex-col items-center justify-center gap-1 text-textTertiary transition-fast active:scale-95"
         >
           <User className="w-5 h-5" />
           <span className="text-[10px] font-medium">Perfil</span>
