@@ -50,8 +50,8 @@ export default function AddExpensePage() {
         </div>
       </header>
 
-      <main className="max-w-2xl mx-auto px-4 pt-16 pb-4">
-        <div className="bg-surface rounded-2xl p-5">
+      <main className="max-w-2xl mx-auto px-4 pt-16 pb-4 w-full">
+        <div className="bg-surface rounded-2xl p-4 sm:p-5 w-full max-w-full overflow-hidden">
           <AddExpenseForm userId={userId} isPage={true} />
         </div>
       </main>
