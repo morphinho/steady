@@ -1,0 +1,71 @@
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
+import { createServerClient } from '@supabase/ssr'
+
+export async function middleware(req: NextRequest) {
+  const res = NextResponse.next()
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return req.cookies.get(name)?.value
+        },
+        set(name: string, value: string, options: any) {
+          req.cookies.set({
+            name,
+            value,
+            ...options,
+          })
+          res.cookies.set({
+            name,
+            value,
+            ...options,
+          })
+        },
+        remove(name: string, options: any) {
+          req.cookies.set({
+            name,
+            value: '',
+            ...options,
+          })
+          res.cookies.set({
+            name,
+            value: '',
+            ...options,
+          })
+        },
+      },
+    }
+  )
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+
+  // Se está tentando acessar dashboard ou profile sem estar autenticado, redireciona para login
+  if ((req.nextUrl.pathname.startsWith('/dashboard') || req.nextUrl.pathname.startsWith('/profile')) && !session) {
+    return NextResponse.redirect(new URL('/login', req.url))
+  }
+
+  // Se está autenticado e tentando acessar login, redireciona para dashboard
+  if (req.nextUrl.pathname === '/login' && session) {
+    return NextResponse.redirect(new URL('/dashboard', req.url))
+  }
+
+  // Redireciona raiz para dashboard se autenticado, senão para login
+  if (req.nextUrl.pathname === '/') {
+    if (session) {
+      return NextResponse.redirect(new URL('/dashboard', req.url))
+    } else {
+      return NextResponse.redirect(new URL('/login', req.url))
+    }
+  }
+
+  return res
+}
+
+export const config = {
+  matcher: ['/', '/dashboard/:path*', '/login', '/profile'],
+}
