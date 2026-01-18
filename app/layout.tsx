@@ -1,6 +1,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { ThemeProvider } from '@/lib/theme-context';
+import SplashScreen from '@/components/splash-screen';
 
 export const metadata: Metadata = {
   title: 'Steady',
@@ -52,6 +53,7 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
       </head>
       <body>
+        <SplashScreen />
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
