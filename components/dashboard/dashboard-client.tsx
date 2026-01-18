@@ -192,8 +192,50 @@ export default function DashboardClient({
       })
       .reduce((sum, e) => sum + Number(e.valor), 0)
 
-    // Projetado = saldo atual + valores recorrentes/fixos/pendentes que ainda não foram contabilizados
-    const projectedBalance = balance + recurringIncomesNotInMonth - fixedExpensesNotInMonth - pendingExpensesNotInMonth
+    // Calcular valor mensal das dívidas abertas
+    const filteredDebts = debts.filter((d) =>
+      accountFilter === 'all' ? true : d.conta === accountFilter
+    )
+
+    const monthlyDebtPayments = filteredDebts
+      .filter((d) => d.status === 'aberta' || d.status === 'atrasada')
+      .reduce((sum, d) => {
+        const valorTotal = Number(d.valor_total)
+        const valorPago = Number(d.valor_pago)
+        const valorRestante = valorTotal - valorPago
+
+        // Se já foi pago tudo, não considerar
+        if (valorRestante <= 0) return sum
+
+        // Se tem parcelas, calcular valor mensal baseado nas parcelas restantes
+        if (d.parcelas_total && d.parcelas_total > 0) {
+          const parcelasPagas = d.parcelas_pagas || 0
+          const parcelasRestantes = d.parcelas_total - parcelasPagas
+
+          // Se não tem mais parcelas restantes, não considerar
+          if (parcelasRestantes <= 0) return sum
+
+          // Valor mensal = valor restante dividido pelas parcelas restantes
+          const valorMensal = valorRestante / parcelasRestantes
+          return sum + valorMensal
+        } else {
+          // Se não tem parcelas definidas, considerar o valor restante total
+          // Mas só se a dívida ainda está ativa (não vencida ou vencimento futuro)
+          const hoje = new Date()
+          const vencimento = d.data_vencimento ? new Date(d.data_vencimento) : null
+          
+          // Se não tem vencimento ou vencimento é futuro/atual, considerar valor restante
+          if (!vencimento || vencimento >= hoje) {
+            return sum + valorRestante
+          }
+          
+          // Se está vencida, considerar o valor restante mesmo assim
+          return sum + valorRestante
+        }
+      }, 0)
+
+    // Projetado = saldo atual + valores recorrentes/fixos/pendentes que ainda não foram contabilizados - pagamentos mensais de dívidas
+    const projectedBalance = balance + recurringIncomesNotInMonth - fixedExpensesNotInMonth - pendingExpensesNotInMonth - monthlyDebtPayments
 
     return {
       totalIncomes,
