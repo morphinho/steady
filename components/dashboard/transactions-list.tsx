@@ -339,15 +339,17 @@ export default function TransactionsList({
         </div>
       </div>
 
-      <TransactionDetailModal
-        open={!!selectedTransaction}
-        onClose={() => setSelectedTransaction(null)}
-        transaction={selectedTransaction?.transaction || null}
-        income={selectedTransaction?.income}
-        expense={selectedTransaction?.expense}
-        debt={selectedTransaction?.debt}
-        onRefresh={onRefresh}
-      />
+      {selectedTransaction && (
+        <TransactionDetailModal
+          open={true}
+          onClose={() => setSelectedTransaction(null)}
+          transaction={selectedTransaction.transaction}
+          income={selectedTransaction.income}
+          expense={selectedTransaction.expense}
+          debt={selectedTransaction.debt}
+          onRefresh={onRefresh}
+        />
+      )}
     </>
   )
 }
