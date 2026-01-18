@@ -230,6 +230,7 @@ export default function UpdateDebtModal({
               value={formData.nome}
               onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
               className="h-9 text-sm"
+              autoFocus={false}
               required
             />
           </div>

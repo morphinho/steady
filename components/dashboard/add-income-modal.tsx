@@ -108,6 +108,7 @@ export default function AddIncomeModal({
               value={formData.valor}
               onChange={(e) => setFormData({ ...formData, valor: e.target.value })}
               className="h-9 text-sm"
+              autoFocus={false}
               required
             />
           </div>
