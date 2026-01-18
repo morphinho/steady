@@ -5,31 +5,25 @@ import ProfileClient from '@/components/profile/profile-client'
 export default async function ProfilePage() {
   const supabase = await createServerClient()
   
-  // Buscar sessão e perfil em paralelo para melhor performance
-  const [sessionResult, profileResult] = await Promise.all([
-    supabase.auth.getSession(),
-    supabase.auth.getUser().then(async (userResult) => {
-      if (!userResult.data.user) return { data: null, error: null }
-      return supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userResult.data.user.id)
-        .maybeSingle()
-    })
-  ])
-
   const {
     data: { session },
-  } = sessionResult
+  } = await supabase.auth.getSession()
 
   if (!session) {
     redirect('/login')
   }
 
+  // Buscar apenas campos necessários para melhor performance
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('id, first_name, last_name, full_name, phone, avatar_url, bio, created_at, updated_at')
+    .eq('id', session.user.id)
+    .maybeSingle()
+
   return (
     <ProfileClient
       user={session.user}
-      profile={profileResult.data}
+      profile={profile}
     />
   )
 }
